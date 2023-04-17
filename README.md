@@ -40,5 +40,13 @@ ros2 service call /spawn_pizza std_srvs/srv/Empty
 ```
 ros2 topic echo /turtle1/scan
 ```
-5.) Move the robot to the spawn pizza and check the scan
+5.) Move the robot so that the greeen region overlap with the spawn pizza and check the scan
+6.) Call /eat service to eat the pizza
+```
+ros2 service call /turtle1/eat std_srvs/srv/Empty
+```
+7.) You can see the pizza count of 'turtle1'
+```
+ros2 topic echo /turtle1/pizza_count
+```
 
