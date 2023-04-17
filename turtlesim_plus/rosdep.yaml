@@ -1,0 +1,11 @@
+# pose_fusion dependencies
+std_msgs:
+  debian: ros-$ROS_DISTRO-std-msgs
+std_srvs:
+  debian: ros-$ROS_DISTRO-std-srvs
+turtlesim:
+  debian: ros-$ROS_DISTRO-turtlesim
+geometry_msgs:
+  debian: ros-$ROS_DISTRO-geometry-msgs
+python-packages:
+  - pygame

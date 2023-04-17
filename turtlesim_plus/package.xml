@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>turtlesim_plus</name>
+  <version>1.0.0</version>
+  <description>
+  turtlesim_plus is a tool simialar to turtlesim with some removed and added feature.
+  </description>
+
+  <maintainer email="thanachachoo@gmail.com">Pi Thanacha Choopojcharoen</maintainer>
+  
+  <license>GPL-3.0-only</license>
+
+  <url type="bugtracker">https://github.com/tchoopojcharoen/turtlesim_plus/issues</url>
+  <url type="repository">https://github.com/tchoopojcharoen/turtlesim_plus</url>
+
+  <author email="thanachachoo@gmail.com">Pi Thanacha Choopojcharoen</author>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>ament_cmake_python</buildtool_depend>
+  <buildtool_depend>rosidl_default_generators</buildtool_depend>
+  
+  <depend>rclcpp</depend>
+  <depend>rclpy</depend>
+  <depend>std_msgs</depend>
+  <depend>std_srvs</depend>
+  <depend>turtlesim</depend>
+  <depend>geometry_msgs</depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+  <build_depend>python3</build_depend>
+  <exec_depend>python3</exec_depend>
+  <member_of_group>python_packages</member_of_group>
+  
+</package>
