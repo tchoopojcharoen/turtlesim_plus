@@ -42,12 +42,23 @@ from std_msgs.msg import Int64
 from std_srvs.srv import Empty
 from turtlesim.msg import Pose
 from turtlesim.srv import Spawn, Kill
-from geometry_msgs.msg import Twist
+from geometry_msgs.msg import Twist, Point
 from turtlesim_plus_interfaces.msg import ScannerData, ScannerDataArray
+from turtlesim_plus_interfaces.srv import GivePosition
 
 class ROS2Plugin(abc.ABC):
     def __init__(self,node:Node):
         self.node = node
+class MouseROS2Plugin(ROS2Plugin):
+    def __init__(self,node:Node):
+        super().__init__(node=node)
+        self.mouse_pub = self.node.create_publisher(Point,'mouse_position',10)
+        self.node.simulator.mouse_callback = self.mouse_callback
+    def mouse_callback(self,pos):
+        msg = Point()
+        msg.x = pos[0]*5.44/250
+        msg.y = 10.88-pos[1]*5.44/250
+        self.mouse_pub.publish(msg)
 class TurtleCommandROS2Plugin(TurtleCommandInterface,ROS2Plugin):
     def __init__(self, turtle: Turtle,node: Node,image):
         TurtleCommandInterface.__init__(self,turtle=turtle)
@@ -144,10 +155,11 @@ class TurtlesimPlusNode(Node):
         super().__init__(node_name='turtlesim_plus')
         time_step = 0.01 
         self.simulator = Simulator(time_step=time_step)
+        self.mouse_plugin = MouseROS2Plugin(self)
         self.create_timer(time_step,self.timer_callback)
         self.spawn_turtle_service = self.create_service(Spawn,'spawn_turtle',self.spawn_turtle_srv_callback)
         self.remove_turtle_service = self.create_service(Kill,'remove_turtle',self.remove_turtle_srv_callback)
-        self.spawn_pizza_service = self.create_service(Empty,'spawn_pizza',self.spawn_pizza_srv_callback)
+        self.spawn_pizza_service = self.create_service(GivePosition,'spawn_pizza',self.spawn_pizza_srv_callback)
         prompt = """
         
         Welcome to Turtlesim+!!
@@ -226,15 +238,20 @@ class TurtlesimPlusNode(Node):
             else:
                 self.get_logger().warning(f'No turtle with the name {request.name}')
         return response
-    def spawn_pizza_srv_callback(self,request:Empty.Request,response:Empty.Response):
+    def spawn_pizza_srv_callback(self,request:GivePosition.Request,response:GivePosition.Response):
         idx = 0
         name = 'pizza0'+str(idx)
         while name in self.simulator.entity_list.keys():
             idx += 1
             name = 'pizza'+str(idx)
-        x = random.uniform(0,10.88)
-        y = random.uniform(0,10.88)
-
+        if not request.x:
+            x = random.uniform(0,10.88)
+        else:
+            x = request.x
+        if not request.y:
+            y = random.uniform(0,10.88)
+        else:
+            y = request.y
         # load graphics when added
         graphics = pygame.image.load(os.path.join(self.simulator.gui.image_dir,'object','pizza.png')).convert_alpha()
         pizza = Pizza(name=name,pose=[x,y,0.0])

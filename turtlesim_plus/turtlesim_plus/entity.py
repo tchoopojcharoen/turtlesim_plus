@@ -24,7 +24,7 @@ import os
 import sys
 import numpy as np
 import abc
-from typing import List, Type, Dict
+from typing import List, Type, Dict, Callable
 import pygame
 
 class Entity(abc.ABC):
@@ -244,11 +244,17 @@ class GUI(EntityManager):
         self.turtle_images  = os.listdir(os.path.join(self.image_dir,'turtle'))
         self.available_images = self.turtle_images.copy()
         self.entity_order = [Pizza,TurtleScannerInterface]
-    def update(self):
+    def update(self,mouse_callback:Callable):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            # Check if the mouse button is released
+            if event.type == pygame.MOUSEBUTTONUP:
+                if event.button == 1:
+                    # Call your callback function with the mouse position as argument
+                    pos = pygame.mouse.get_pos()
+                    mouse_callback(pos)
         self.render()
 
     def render(self):
@@ -266,11 +272,12 @@ class Engine(EntityManager):
         for name,entity in self.entity_list.items():
             entity.update(self.time_step, every_entities)
 class Simulator(EntityManager):
-    def __init__(self,time_step:float=0.01):
+    def __init__(self,time_step:float=0.01,mouse_callback:Callable=lambda x: print('mouse is clicked')):
         super().__init__(entity_type=Entity)
         self.time_step = time_step
         self.engine = Engine(time_step=time_step)
         self.gui = GUI()
+        self.mouse_callback = mouse_callback
     def add_entity(self, entity):
         if isinstance(entity,GraphicsEntity):
             self.gui.add_entity(entity=entity)
@@ -286,4 +293,4 @@ class Simulator(EntityManager):
     
     def step(self):
         self.engine.step(every_entities=self.entity_list)
-        self.gui.update()
+        self.gui.update(self.mouse_callback)
