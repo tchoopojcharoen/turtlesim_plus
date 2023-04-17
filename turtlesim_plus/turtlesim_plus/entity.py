@@ -85,13 +85,19 @@ class Turtle(PhysicsEntity,GraphicsEntity):
         q_new = dR@q
         theta_new = math.atan2(q_new[1],q_new[0])
         if  abs(dtheta)<0.00000001:
-            V = np.eye(2)
+            V = np.eye(2)*dt
         else:            
             V = np.array([[q_dtheta[1],q_dtheta[0]-1],[1-q_dtheta[0],q_dtheta[1]]])
         R_new = np.array([q_new,[-q_new[1],q_new[0]]]).T
         dp = R_new@V@np.array([cmd_vel[0],0])
         p_new = np.array(self.pose[0:2])+dp
+        for i in range(2):
+            if p_new[i]<=0:
+                p_new[i] = 0.0
+            if p_new[i]>=10.88:
+                p_new[i] = 10.88
         self.pose = [p_new[0],p_new[1],theta_new]
+        
         self.state = self.pose
     def render(self,screen):
         img = pygame.transform.rotate(self.graphics, self.pose[2]*180/math.pi-90)
