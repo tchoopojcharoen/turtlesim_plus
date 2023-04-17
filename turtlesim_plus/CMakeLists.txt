@@ -28,6 +28,7 @@ ament_python_install_package(${PROJECT_NAME})
 # Install Python executables
 install(PROGRAMS
   scripts/turtlesim_plus_node.py
+  scripts/pizza_on_click.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
