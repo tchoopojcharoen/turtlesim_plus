@@ -1,6 +1,9 @@
 # turtlesim_plus
-"turtlesim_plus" is a tool similar to "turtlesim" with some added features such as /spawn_pizza and /eat services..   
+<p align="center">
+  <img src="ezgif-1-5157c08e56.gif">
+</p>
 
+"turtlesim_plus" is a tool similar to "turtlesim" with some added features such as /spawn_pizza and /eat services..   
 ## Installation
 1.) Clone the repo to the src directory of your workspace. You must unzip and put each folder in the src directory.
 2.) Add "dependencies_install.bash" to your workspace [outside of the src directory]. Execute the script to install all necessary Python libraries and ROS2 Packages.
