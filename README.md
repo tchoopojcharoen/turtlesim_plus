@@ -30,10 +30,10 @@ ros2 run turtlesim_plus turtlesim_plus_node
 ros2 run turtlesim turtle_teleop_key
 ```
 
-3.) Spawn a pizza (or more !!)
+3.) Spawn a pizza (or more !!) by using "pizza_on_click.py" and click on the GUI.
 
 ```
-ros2 service call /spawn_pizza std_srvs/srv/Empty
+ros2 run turtlesim_plus pizza_on_click.py
 ```
 
 4.) Echo the scan data
