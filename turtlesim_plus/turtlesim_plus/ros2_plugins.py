@@ -36,6 +36,8 @@ from turtlesim_plus.entity import (
 
 # RCLPY libraries, classes, functions
 from rclpy.node import Node
+from rclpy.action import ActionServer
+from rclpy.action.server import ServerGoalHandle
 
 # ROS Packages
 from std_msgs.msg import Int64
@@ -45,6 +47,7 @@ from turtlesim.srv import Spawn, Kill
 from geometry_msgs.msg import Twist, Point
 from turtlesim_plus_interfaces.msg import ScannerData, ScannerDataArray
 from turtlesim_plus_interfaces.srv import GivePosition
+from turtlesim_plus_interfaces.action import GetData
 
 class ROS2Plugin(abc.ABC):
     def __init__(self,node:Node):
@@ -92,6 +95,25 @@ class TurtleScannerROS2Plugin(TurtleScannerInterface,ROS2Plugin):
         TurtleScannerInterface.__init__(self,turtle=turtle)
         ROS2Plugin.__init__(self,node=node)
         self.scanner_pub = self.node.create_publisher(ScannerDataArray,self.turtle.name+'/scan',10)
+        self.action_server = ActionServer(self.node,GetData,self.turtle.name+'/detect_pizza',self.execute_callback)
+    def execute_callback(self,goal_handle:ServerGoalHandle):
+        result = GetData.Result()
+        if len(self.scanner_output)>0:
+            result.is_data = True
+            msg = ScannerDataArray()
+            for data in self.scanner_output:
+                scanner_data = ScannerData()
+                if str(data.type.__name__)=='Pizza':
+                    scanner_data.type = 'Pizza'
+                    scanner_data.angle = data.angle
+                    scanner_data.distance = data.distance
+                    msg.data.append(scanner_data)
+            result.data = msg
+            goal_handle.succeed()
+        else:
+            result.is_data = False
+            goal_handle.abort()
+        return result
     def update(self, dt: float = 0.1, entity_list:Dict[str,Entity] = {}, *args, **kwargs):
         TurtleScannerInterface.update(self,dt=dt,entity_list=entity_list)
         self.set_state(self.turtle.state)

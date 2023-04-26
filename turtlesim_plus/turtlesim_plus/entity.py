@@ -91,6 +91,12 @@ class Turtle(PhysicsEntity,GraphicsEntity):
         R_new = np.array([q_new,[-q_new[1],q_new[0]]]).T
         dp = R_new@V@np.array([cmd_vel[0],0])
         p_new = np.array(self.pose[0:2])+dp
+
+        p_new = [
+            self.pose[0]+dt*cmd_vel[0]*math.cos(self.pose[2]),
+            self.pose[1]+dt*cmd_vel[0]*math.sin(self.pose[2]),
+            self.pose[2]+dt*cmd_vel[1]
+        ]
         for i in range(2):
             if p_new[i]<=0:
                 p_new[i] = 0.0
