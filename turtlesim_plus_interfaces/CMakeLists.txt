@@ -27,5 +27,7 @@ find_package(rosidl_default_generators REQUIRED)
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/ScannerData.msg"
   "msg/ScannerDataArray.msg"
+  "srv/GivePosition.srv"
+  "action/GetData.action"
 )
 ament_package()
