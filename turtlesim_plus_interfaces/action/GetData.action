@@ -1,0 +1,4 @@
+---
+bool is_data
+ScannerDataArray data
+---
