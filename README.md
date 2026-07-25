@@ -6,7 +6,7 @@ can scan for nearby entities with a cone-shaped sensor, eat spawned pizzas, and 
 to a drop-off zone. Multiple turtles are supported natively — each is a self-contained
 composition of ROS2 plugins (command/scanner/eat/delivery), not a hardcoded singleton.
 
-![The turtlesim_plus pygame window: a turtle spins in place scanning, then drives toward and eats a nearby pizza slice, then resumes scanning](docs/forage_demo.gif)
+![The turtlesim_plus pygame window: a turtle spins in place scanning, then drives toward and eats a nearby pizza slice, then resumes scanning](turtlesim_plus/docs/forage_demo.gif)
 
 *The `turtlesim_plus_node` window driven autonomously by
 [`turtlesim_plus_bt`](../turtlesim_plus_bt)'s forage behavior tree — no manual teleop.
